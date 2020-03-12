@@ -3,7 +3,7 @@ Web application to execute repetitive and analytical actions over the Boomi's me
 
 
 ## What is?
-A productivity tool for every Boomi developer who wants to do repetitive and booring activities in a automated way. In addition for thouse 
+A productivity tool for every Boomi developer who wants to do repetitive and booring activities in a automated way. In addition for those who wants go further and analyze meta data about executions, processes status, quality of the integrations developed, etc. 
 
 
 ## Why?
@@ -23,6 +23,12 @@ To resolve quickly and automatically questions like:
 * Retrieve the schedule information of each process, using filters.
 * Deactivate schedules for the processes found. 
 * Detach processes from the selected molecule.
+
+
+## To Do
+* Extensions module.
+* Analytical module.
+* Quality code module.
 
 
 ## Additional specs
