@@ -1,9 +1,9 @@
 # QB
-Web application to execute repetitive and analytical actions over the Boomi's metadata, using the Boomi Atomsphere API.
+Web application to execute massive repetitive and analytical actions over the Boomi's metadata, using the Boomi Atomsphere API.
 
 
 ## What is?
-A productivity tool for every Boomi developer who wants to do repetitive and booring activities in a automated way. In addition for those who wants go further and analyze meta data about executions, processes status, quality of the integrations developed, etc. 
+A productivity tool for every Boomi developer/team who wants to do repetitive and booring activities in a automated way. In addition for those who wants go further and analyze meta data about executions, processes status, quality of the integrations developed, etc. 
 
 
 ## Why?
@@ -20,14 +20,16 @@ To resolve quickly and automatically questions like:
 ## What can you currently do?
 * Retrieve the atoms and environments available.
 * Retrieve the process list from the Build repository, using filters.
+* Retrieve the deployment information of each process, using filters.
 * Retrieve the schedule information of each process, using filters.
 * Deactivate schedules for the processes found. 
 * Detach processes from the selected molecule.
+* Export the information retrieved on CSV format.
 
 
 ## To Do
-* Extensions module.
 * Analytical module.
+* Extensions module.
 * Quality code module.
 
 
@@ -42,11 +44,13 @@ To resolve quickly and automatically questions like:
 * Dell Boomi
 * Python
 * Django
-* SQLite (Coming soon)
-* Bootstrap
+* SQLite (To improve)
+* HTML + CSS (Bootstrap) + JS
+* Docker (To implement)
+* Sumo Logic (To implement)
 
 
-## Requirements
+## Requirements (To upgrade)
 Python 3.6:
 * Django==2.1.3
 * django-tables2==2.2.1
