@@ -1,0 +1,164 @@
+<!-- QBApp/templates/index.html -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+
+  <title>QB access</title>
+    {% load static %}
+    <link rel="icon" href="{%  static 'favicon.ico' %}">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      /* Loading/redirecting screen styles */
+      .loader17{position:relative;width:65px;border:1px solid transparent;margin:40px auto}
+      .loader17 span{position:absolute;bottom:0;display:block;width:9px;height:5px;border-radius:5px;background:rgba(0,0,0,.1);-webkit-animation:preloader 2s infinite ease-in-out;animation:preloader 2s infinite ease-in-out}
+      .loader17 span:nth-child(2){left:11px;-webkit-animation-delay:.2s;animation-delay:.2s}
+      .loader17 span:nth-child(3){left:22px;-webkit-animation-delay:.4s;animation-delay:.4s}
+      .loader17 span:nth-child(4){left:33px;-webkit-animation-delay:.6s;animation-delay:.6s}
+      .loader17 span:nth-child(5){left:44px;-webkit-animation-delay:.8s;animation-delay:.8s}
+      .loader17 span:nth-child(6){left:55px;-webkit-animation-delay:1s;animation-delay:1s}
+      @-webkit-keyframes preloader{
+      	0%,100%,50%{height:5px;-webkit-transform:translateY(0);transform:translateY(0);background:rgba(0,0,0,.1)}
+      	25%{height:30px;-webkit-transform:translateY(15px);transform:translateY(15px);background:#f8990c}
+      }
+      @keyframes preloader{
+      	0%,100%,50%{height:5px;-webkit-transform:translateY(0);transform:translateY(0);background:rgba(0,0,0,.1)}
+      	25%{height:30px;-webkit-transform:translateY(15px);transform:translateY(15px);background:#f8990c}
+      }
+
+      .tooltip {
+        font-size: 9px;
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{%  static 'css/floating-labels.css' %}">
+
+  </head>
+  <body>
+
+    <!-- Loading/redirecting screen -->
+    <div id="loader" class="container" style="display: {{ redirected }};">
+        <br/><br/>
+        <p style="text-align: center;">Your session has ended. You are being redirected...</p>
+        <div class="row">
+            <div class="col-12">
+                <div class="loader17">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <br/><br/>
+    </div>
+
+
+    <form id="formLogin" class="form-signin" action="loginuser/" method="post" style="display:none">
+
+      <!-- ** QB General alert ** -->
+      <!-- <div class="alert alert-warning alert-dismissible fade show p-3 pr-4" role="alert" style="font-size:0.7rem ; display:block;">
+        <strong>🐛 A bug's life!</strong> We have detected a bug on the process search results, specifically, the column "deployed" is not showing correct information.
+        The offboard action is working ok.
+        <button type="button" class="close p-2" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> -->
+
+      {% csrf_token %}
+      <div class="text-center mb-4">
+
+        {% load static %}
+        <img class="mb-4" src="{% static 'QBEye.png' %}" alt="" width="100" height="100">
+
+        <h1 class="h3 mb-3 font-weight-normal">Welcome to QB!</h1>
+        <p>Please login using your regular Boomi user and password.
+          <span class="badge badge-info" data-toggle="tooltip" data-placement="right" data-html="true" title="If you Boomi account has Two-factor authentication you have to put: <strong>BOOMI_TOKEN.&lt; username &#62;</strong> as email address and enter your <strong>AtomSphere API token</strong> in the password field">?</span>
+        </p>
+      </div>
+
+      <div id="QBSays" class="alert alert-danger" role="alert" style="display: {{ showError }};">
+        The email, password or account you entered did not match. Please check and try again.
+      </div>
+
+      <div class="form-label-group">
+        {{ formLogin.email }}
+        <label for="inputEmail">Email address</label>
+      </div>
+
+      <div class="form-label-group">
+        {{ formLogin.password }}
+        <label for="inputPassword">Password</label>
+      </div>
+
+      <div class="form-label-group">
+        {{ formLogin.accountId }}
+        <label for="inputToken">Boomi account</label>
+      </div>
+
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+      <p class="mt-5 mb-3 text-muted text-center"> <a href="http://www.jaimehmol.me" target="_blank">JaimeHMol</a> © 2020</p>
+
+      <h1> <br></h1>
+      <a href="about/">About Me</a>
+      <h1> <br></h1>
+
+    </form>
+
+
+    <!-- Required for some bootsrap components -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- For the tooltips -->
+    <script>
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+
+    <!-- JavaScript neccessaries for the loading/redirecting screen -->
+    <script>
+      jQuery(document).ready(function(){
+        $( "#loader" ).delay(800).fadeOut(400, function(){
+            $( "#formLogin" ).fadeIn(400);
+        });
+      });
+    </script>
+    <!-- ************************************ -->
+
+  </body>
+</html>

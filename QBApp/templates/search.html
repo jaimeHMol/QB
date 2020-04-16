@@ -1,0 +1,261 @@
+<!-- QBApp/templates/search.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>QB search</title>
+    {% load static %}
+    <link rel="icon" href="{%  static 'favicon.ico' %}">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+
+  </head>
+  <body class="bg-light">
+
+
+    <div class="container">
+
+      <!-- ************************************ -->
+      <!-- ***          User box            *** -->
+      <!-- ************************************ -->
+      <div class="d-flex flex-row-reverse bd-highlight pt-1 pt-sm-2 pt-md-2 pt-lg-3 pt-xl-3">
+        <div class="bd-highlight align-self-center" style="padding: 0 0 0 1rem">
+          <img width="35" style="border-radius: 50%;" height="35" avatar="{{ userFullName }}">
+        </div>
+        <div class="p bd-highlight">
+          <div class="row no-gutters" style="height:60%">
+            <span class="navbar-text" style="padding:0 0">Hi, {{ userFullName }}</span>
+          </div>
+          <div class="row no-gutters float-right" style="height:40%">
+            <a href="logout/" style="font-size: 0.7rem;">Logout</a>
+          </div>
+        </div>
+      </div>
+      <!-- ************************************ -->
+
+
+      <div class="py-2 py-sm-4 py-md-5 py-lg-5 py-xl-5">
+        {% load static %}
+        <img class="d-block mx-auto mb-4" src="{% static 'QBLogo.png' %}" alt="" width="100" height="100">
+
+        <h2>Hi, I'm QB!</h2>
+        <p class="lead ">I will help you to do massive and boring Boomi tasks.
+          <br>
+          <br>This time I will tell you the schedule configuration for all the process that follow the process name filter you enter.</p>
+      </div>
+
+
+      <div class="row">
+        <div class="col">
+          <form id="searchForm" class="needs-validation" novalidate="" action="qresults2/" method="get"> <!--{% csrf_token %}-->
+            <div class="row"> <!--To have two column form-->
+              <div class="col-md-6 mb-3"> <!--To have two column form-->
+                <div class="form-group">
+                  <label for="environment">Environment: </label>
+                  {{ form.environment }}
+                  <div class="invalid-feedback">
+                    Please provide an environment to search.
+                  </div>
+                </div>
+              </div> <!--To have two column form-->
+              <div class="col-md-6 mb-3"> <!--To have two column form-->
+                <div class="form-group">
+                  <label for="processesToFind">Filter to find the processes you need:</label>
+                  <span class="badge badge-info" data-toggle="tooltip" title="You can use the character % as a wildcard, to search for a specified name pattern">?</span>
+                  {{ form.processesToFind }}
+                  <div class="invalid-feedback">
+                    A valid process name or regular expression is required.
+                  </div>
+                </div>
+              </div> <!--To have two column form-->
+            </div> <!--To have two column form-->
+            <hr class="mb-4">
+
+            <!-- Submit button -->
+            <button id = "searchFormSubmit" class="btn btn-primary btn-lg btn-block" type="submit"> Search</button>
+            <!-- Loading button -->
+            <button id = "searchFormSubmitLoading" class="btn btn-primary btn-lg btn-block" type="button" disabled style="display: none;">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+          </form>
+
+          <br>
+
+          <div id="QBSays" class="alert alert-info alert-dismissible fade show" role="alert" style="display: none;">
+            Please be patient, the Boomi Athomsphere API calls can take several minutes to respond...
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+
+      <h1> <br></h1>
+      <a href="about/">About Me</a>
+      <h1> <br></h1>
+    </div>
+
+
+    <!-- ************************************ -->
+    <!-- ***        Script section        *** -->
+    <!-- ************************************ -->
+
+    <!-- JavaScript for disabling form submissions if there are invalid fields -->
+    <script>
+      (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', async function(event) {
+              if (form.checkValidity() === false) {
+                // If there is any field with an validation error
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              else{
+                // If all the fields pass the form validation convert submit button
+                // into loading button
+                document.getElementById("searchFormSubmit").setAttribute("style", "display: none;");
+                document.getElementById("searchFormSubmitLoading").removeAttribute("style");
+
+                // After 30 seconds show alert to explain why is taking so long
+                // await new Promise(r => setTimeout(r, 1000));
+                // document.getElementById("QBSays").removeAttribute("style");
+                // setInterval(function(){ document.getElementById("QBSays").removeAttribute("style"); }, 30000); It does it multiple times
+                setTimeout(function(){
+                  document.getElementById("QBSays").removeAttribute("style");
+                  document.getElementById("searchForm").scrollIntoView();
+                }, 30000);
+
+                // After 40 seconds show another alert to explain why is taking so so long
+                setTimeout(function(){
+                  document.getElementById("QBSays").removeAttribute("style");
+                  document.getElementById("QBSays").innerHTML="Depending on how much specific are you filters, the search can take more time... <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
+                }, 40000);
+
+                // After 80 seconds show another alert to explain why is taking so so long
+                setTimeout(function(){
+                  document.getElementById("QBSays").removeAttribute("style");
+                  document.getElementById("QBSays").innerHTML="Seriously, it can take up to 7 minutes loading... <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
+                }, 80000);
+
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+    </script>
+
+    <!-- Create Letter avatar based on Initials
+     Artur Heinze - based on https://gist.github.com/leecrossley/6027780 -->
+    <script>
+      (function(w, d){
+        function LetterAvatar (name, size) {
+
+          name  = name || '';
+          size  = size || 60;
+
+          var colours = [
+                  "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50",
+                  "#e74c3c", "#95a5a6", "#d35400", "#c0392b", "#bdc3c7", "#7f8c8d"
+              ],
+
+          nameSplit = String(name).toUpperCase().split(' '),
+          initials, charIndex, colourIndex, canvas, context, dataURI;
+
+
+          if (nameSplit.length == 1) {
+            initials = nameSplit[0] ? nameSplit[0].charAt(0):'?';
+          } else {
+            initials = nameSplit[0].charAt(0) + nameSplit[1].charAt(0);
+          }
+
+          if (w.devicePixelRatio) {
+            size = (size * w.devicePixelRatio);
+          }
+
+          charIndex     = (initials == '?' ? 72 : initials.charCodeAt(0)) - 64;
+          colourIndex   = charIndex % 20;
+          canvas        = d.createElement('canvas');
+          canvas.width  = size;
+          canvas.height = size;
+          context       = canvas.getContext("2d");
+
+          context.fillStyle = colours[colourIndex - 1];
+          context.fillRect (0, 0, canvas.width, canvas.height);
+          context.font = Math.round(canvas.width/2)+"px Arial";
+          context.textAlign = "center";
+          context.fillStyle = "#FFF";
+          context.fillText(initials, size / 2, size / 1.5);
+
+          dataURI = canvas.toDataURL();
+          canvas  = null;
+
+          return dataURI;
+        }
+
+        LetterAvatar.transform = function() {
+          Array.prototype.forEach.call(d.querySelectorAll('img[avatar]'), function(img, name) {
+              name = img.getAttribute('avatar');
+              img.src = LetterAvatar(name, img.getAttribute('width'));
+              img.removeAttribute('avatar');
+              img.setAttribute('alt', name);
+          });
+        };
+
+        // AMD support
+        if (typeof define === 'function' && define.amd) {
+          define(function () { return LetterAvatar; });
+
+        // CommonJS and Node.js module support.
+        } else if (typeof exports !== 'undefined') {
+          // Support Node.js specific `module.exports` (which can be a function)
+          if (typeof module != 'undefined' && module.exports) {
+            exports = module.exports = LetterAvatar;
+          }
+
+          // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+          exports.LetterAvatar = LetterAvatar;
+
+        } else {
+          window.LetterAvatar = LetterAvatar;
+
+          d.addEventListener('DOMContentLoaded', function(event) {
+              LetterAvatar.transform();
+          });
+        }
+      })
+      (window, document);
+    </script>
+
+    <!-- Required for some bootsrap components -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- For the tooltips -->
+    <script>
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
+    <!-- ************************************ -->
+
+  </body>
+</html>

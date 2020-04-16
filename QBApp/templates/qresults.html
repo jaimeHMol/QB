@@ -1,0 +1,302 @@
+<!-- QBApp/templates/qresults.html -->
+{% load render_table from django_tables2 %}
+<!doctype html>
+<html>
+  <head>
+    <title>QB results</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  </head>
+
+  <body>
+
+    <!-- ************************************ -->
+    <!-- ***       Navigation bar         *** -->
+    <!-- ************************************ -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #fd8005;">
+      <a class="navbar-brand" href="..">QB</a><a class="navbar-brand" style="color:#fff; hover{color:#fff}">/ Results</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">&nbsp&nbsp&nbsp Processes<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">&nbsp&nbsp&nbsp Analytics</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">&nbsp&nbsp&nbsp Extensions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">&nbsp&nbsp&nbsp Quality Code</a>
+          </li>
+          <li class="nav-item">
+
+            <!-- TODO: Put link to Boomi Best Practices in your company -->
+            <a class="nav-link" href="https://community.boomi.com/s/article/AtomSphereDeveloperBestPracticesChecklist" target="_blank">
+              <!-- <strong>📓Best practices</strong>
+              <strong>⭐Best practices</strong> -->
+              &nbsp&nbsp&nbsp🙏🏻
+            </a>
+            </a>
+            </a>
+          </li>
+        </ul>
+
+        <!-- User Box  -->
+        <div class="d-flex flex-row-reverse bd-highlight">
+          <div class="bd-highlight align-self-center" style="padding: 0 0 0 1rem">
+            <img width="35" style="border-radius: 50%;" height="35" avatar="{{ userFullName }}">
+          </div>
+          <div class="p bd-highlight">
+            <div class="row no-gutters" style="height:60%">
+              <span class="navbar-text" style="padding:0 0; color:#0b2b54bf;">{{ userFullName }}</span>
+            </div>
+            <div class="row no-gutters float-right" style="height:40%">
+              <!-- <a href="" style="font-size: 0.7rem;">Logout</a> -->
+              <a href="logout/" style="font-size: 0.7rem;">Logout</a>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </nav>
+    <!-- ************************************ -->
+
+
+    <div class="py-5" style="padding-bottom: 0rem!important;"/>
+
+
+    <!-- ************************************ -->
+    <!-- *** Additional info card section *** -->
+    <!-- ************************************ -->
+    <div class="row justify-content-around mr-xl-5 pr-xl-5" style="margin: auto 10px;">
+      <!-- Processes card -->
+      <div class="col-6 col-md-3 col-xl-3  px-2">
+        <div class="card mb-3" style="margin: auto 5px;">
+          <div class="row no-gutters">
+            <div class="col my-lg-3 my-md-1 my-2" style="display: flex;">
+              {% load static %}
+              <img src="{% static 'processIco.png' %}" class="card-img-top" alt="..." style="width:65px; margin:auto;">
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-12">
+              <div class="card-body" style = "padding: 0.75rem">
+                <h5 class="card-title">{{processesCount}}</h5>
+                <p class="card-text" style="font-size: 0.8rem;">Total processes found</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deploys card -->
+      <div class="col-6 col-md-3 col-xl-3  px-2">
+        <div class="card mb-3" style="margin: auto 5px;">
+          <div class="row no-gutters">
+            <div class="col my-lg-3 my-md-1 my-2" style="display: flex;">
+              {% load static %}
+              <img src="{% static 'rocketIco.png' %}" class="card-img-top" alt="..." style="width:63px; margin: auto;">
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-12">
+              <div class="card-body" style = "padding: 0.75rem">
+                <h5 class="card-title">{{resultsDeployments}}</h5>
+                <p class="card-text" style="font-size: 0.8rem;">Total deployments found</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedules card -->
+      <div class="col-6 col-md-3 col-xl-3  px-2">
+        <div class="card mb-3" style="margin: auto 5px;">
+          <div class="row no-gutters">
+            <div class="col my-lg-3 my-md-1 my-2" style="display: flex;">
+              {% load static %}
+              <img src="{% static 'calendarIco.png' %}" class="card-img-top" alt="..." style="width:63px; margin: auto;">
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-12">
+              <div class="card-body" style = "padding: 0.75rem">
+                <h5 class="card-title">{{resultsCount}}</h5>
+                <p class="card-text" style="font-size: 0.8rem;">Total schedules found</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warnings card -->
+      <div class="col-6 col-md-3 col-xl-3  px-2">
+        <div class="card mb-3" style="margin: auto 5px;">
+          <div class="row no-gutters">
+            <div class="col my-lg-3 my-md-1 my-2" style="display: flex;">
+              {% load static %}
+              <img src="{% static 'warningIco.png' %}" class="card-img-top" alt="..." style="width:63px; margin: auto;">
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-12">
+              <div class="card-body" style = "padding: 0.75rem">
+                <h5 class="card-title"> 0 </h5>
+                <p class="card-text" style="font-size: 0.8rem;">Total warnings found</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ************************************ -->
+
+
+    <!-- ************************************ -->
+    <!-- ***    Results table section     *** -->
+    <!-- ************************************ -->
+    {% render_table table %}
+    <!-- ************************************ -->
+
+    <br>
+
+    <!-- ************************************ -->
+    <!-- ***        Action Buttons        *** -->
+    <!-- ************************************ -->
+    <div class = "row justify-content-start" style="margin: auto 10px;">
+      <!-- New search button -->
+      <div class = "col-auto px-1">
+        <a href=".."><button type="button" class="btn btn-primary">New search</button></a>
+      </div>
+
+      <!-- Export CSV button -->
+      <div class = "col-auto px-1">
+        <form  action="exportocsv/" method="GET">
+          <button type="submit" class="btn btn-primary">Export CSV</button>
+        </form>
+      </div>
+
+      <!-- Offboard button -->
+      <div class = "col-auto px-1">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmOffboardModal" {%if resultsDeployments  == 0 and resultsCount == 0%} disabled {% endif%}>
+          Offboard all
+        </button>
+      </div>
+
+      <div class="modal fade" id="confirmOffboardModal" tabindex="-1" role="dialog" aria-labelledby="confirmOffboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmOffboardModalLabel">Are you sure?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to unschedule {{resultsCount}} processes and to undeploy {{resultsDeployments}} processes?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <form action='offboard/' method='GET'>
+                <button type="submit" class="btn btn-primary">Offboard!</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ************************************ -->
+
+
+    <!-- ************************************ -->
+    <!-- ***        Script section        *** -->
+    <!-- ************************************ -->
+
+    <!-- Create Letter avatar based on Initials
+     Artur Heinze - based on https://gist.github.com/leecrossley/6027780 -->
+    <script>
+      (function(w, d){
+        function LetterAvatar (name, size) {
+
+          name  = name || '';
+          size  = size || 60;
+
+          var colours = [
+                  "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50",
+                  "#e74c3c", "#95a5a6", "#d35400", "#c0392b", "#bdc3c7", "#7f8c8d"
+              ],
+
+          nameSplit = String(name).toUpperCase().split(' '),
+          initials, charIndex, colourIndex, canvas, context, dataURI;
+
+
+          if (nameSplit.length == 1) {
+            initials = nameSplit[0] ? nameSplit[0].charAt(0):'?';
+          } else {
+            initials = nameSplit[0].charAt(0) + nameSplit[1].charAt(0);
+          }
+
+          if (w.devicePixelRatio) {
+            size = (size * w.devicePixelRatio);
+          }
+
+          charIndex     = (initials == '?' ? 72 : initials.charCodeAt(0)) - 64;
+          colourIndex   = charIndex % 20;
+          canvas        = d.createElement('canvas');
+          canvas.width  = size;
+          canvas.height = size;
+          context       = canvas.getContext("2d");
+
+          context.fillStyle = colours[colourIndex - 1];
+          context.fillRect (0, 0, canvas.width, canvas.height);
+          context.font = Math.round(canvas.width/2)+"px Arial";
+          context.textAlign = "center";
+          context.fillStyle = "#FFF";
+          context.fillText(initials, size / 2, size / 1.5);
+
+          dataURI = canvas.toDataURL();
+          canvas  = null;
+
+          return dataURI;
+        }
+
+        LetterAvatar.transform = function() {
+          Array.prototype.forEach.call(d.querySelectorAll('img[avatar]'), function(img, name) {
+              name = img.getAttribute('avatar');
+              img.src = LetterAvatar(name, img.getAttribute('width'));
+              img.removeAttribute('avatar');
+              img.setAttribute('alt', name);
+          });
+        };
+
+        // AMD support
+        if (typeof define === 'function' && define.amd) {
+          define(function () { return LetterAvatar; });
+
+        // CommonJS and Node.js module support.
+        } else if (typeof exports !== 'undefined') {
+          // Support Node.js specific `module.exports` (which can be a function)
+          if (typeof module != 'undefined' && module.exports) {
+            exports = module.exports = LetterAvatar;
+          }
+
+          // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+          exports.LetterAvatar = LetterAvatar;
+
+        } else {
+          window.LetterAvatar = LetterAvatar;
+
+          d.addEventListener('DOMContentLoaded', function(event) {
+              LetterAvatar.transform();
+          });
+        }
+      })
+      (window, document);
+    </script>
+
+    <!-- Required for some bootsrap components -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- ************************************ -->
+  </body>
+</html>

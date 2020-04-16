@@ -1,0 +1,32 @@
+<!-- QBApp/templates/noresults.html -->
+{% load render_table from django_tables2 %}
+<!doctype html>
+<html>
+    <head>
+      <meta charset="utf-8">
+      <title>No Results</title>
+      {% load static %}
+      <link rel="icon" href="{%  static 'favicon.ico' %}">
+
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    </head>
+    <body class="bg-light">
+      <div class="container">
+        <div class="py-5">
+          {% load static %}
+          <img class="d-block mx-auto mb-4" src="{% static 'sadQB.png' %}" alt="" width="100" height="100">
+          <h2>Sorry</h2>
+          <p class="lead">Your search criteria didn't retrieve any result.
+            <br>
+            <br>Try going back and changing the filters.</p>
+        </div>
+      </div>
+
+      <h1> <br></h1>
+      <h1> <br></h1>
+      <a href="..">New search</a>
+    </body>
+</html>
