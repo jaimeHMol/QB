@@ -30,6 +30,7 @@ urlpatterns = [
     path("favicon.ico", RedirectView.as_view(url="/static/favicon.ico")),
 
     # Whatever other url redirects to login page.
+    # HINT: This hides the Django admin pages
     re_path(r'^.*$', views.RedirectCall.as_view())
     # --------------------------------------------------------------------------
 ]
