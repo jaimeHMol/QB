@@ -37,22 +37,24 @@ def userLogin(request):
     endpoint = baseUrl + "/" + accountId + "/" + OBJECT + "/" + OPERATION
     data = ''
     authenticated = False
+    errorMessage = "Not authenticated"
 
     accountResponse = requests.post(endpoint, headers=headers, data=data)
 
     if (accountResponse.status_code == 200):
         authenticated = True
+        errorMessage = ""
         logging.info(" ")
         logging.info(" ")
         logging.info("*** [Info]: " + "" + " succesfully authenticated by Boomi Atomsphere API.")
     else:
         authenticated = False
+        errorMessage = accountResponse.text.split("<Data>")[1].split("</Data>")[0]
         logging.info(" ")
         logging.info(" ")
         logging.info("*** [Info]: " + "" + " haven't been authenticated by Boomi Atomsphere API.")
-        logging.warning(accountResponse.text)
 
-    return authenticated
+    return authenticated, errorMessage
 
 
 def environmentList(request):

@@ -215,12 +215,14 @@ class LoginView(TemplateView):
     def get(self, request, **kwargs):
 
         redirected = request.session.get("redirected", False)
-        showError = request.session.get("showError", "none")
+        errorCode = request.session.get("errorCode", 0)
+        errorMessage = request.session.get("errorTrace", '')
         accountId = request.session.get("accountId", '')
         email = request.session.get("email", '')
         # template_name = "index.html"
 
-        request.session["showError"] = "none"
+        request.session["errorCode"] = 0
+        request.session["errorTrace"] = ''
         request.session["email"] = ''
         request.session["accountId"] = ''
         request.session["redirected"] = False
@@ -231,7 +233,9 @@ class LoginView(TemplateView):
                                              "email":email,
                                              "accountId":""})
 
-        return render(request, "index.html", {"formLogin": formLogin, "showError": showError, "redirected":redirected})
+        showError = "block" if errorCode == 1 else "none"
+
+        return render(request, "index.html", {"formLogin": formLogin, "showError": showError, "errorMessage": errorMessage, "redirected": redirected})
 
 
 class ErrorView(TemplateView):
@@ -239,6 +243,8 @@ class ErrorView(TemplateView):
     @qbInterceptor
     def get(self, request, **kwargs):
         errorTrace = request.session.get("errorTrace", "Unknown")
+        request.session["errorCode"] = 0
+        request.session["errorTrace"] = ''
 
         return render(request, "error.html", {"errorTrace": errorTrace})
 
@@ -319,16 +325,20 @@ class LoginUserCall(ListView):
         # TODO: Encrypt this:
         # request.session["key"] = encrypt (SESSIONID, base64.b64encode(key.encode("utf-8")))
 
-        userBoomiAuthenticated = boomiAPIBuildRequests.userLogin(request)
+        userBoomiAuthenticated, errorMessage = boomiAPIBuildRequests.userLogin(request)
         if userBoomiAuthenticated:
             request.session["userFullName"] = userFullName
             # Generates session id
             sessionId = random.uniform(0,7777777)
             request.session["sessionId"] = sessionId
-            return redirect("/search/")
+            page = "/search/"
         else:
-            request.session["showError"] = "block"
-            return redirect("/")
+            request.session["errorCode"] = 1
+            request.session["errorTrace"] = errorMessage
+            page = "/"
+            # return render(request, '../', {'formLogin': formLogin})
+
+        return redirect(page)
 
 
 class LogoutCall(TemplateView):
