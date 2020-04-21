@@ -61,9 +61,15 @@
   <body>
 
     <!-- Loading/redirecting screen -->
-    <div id="loader" class="container" style="display: {{ redirected }};">
+    <div id="loader" class="container" style="display: block;">
         <br/><br/>
-        <p style="text-align: center;">Your session has ended. You are being redirected...</p>
+        <p style="text-align: center;">
+          {%if redirected == "block"%}
+            Your session has ended. You are being redirected...
+          {%else%}
+            Loading QB App...
+          {%endif%}
+        </p>
         <div class="row">
             <div class="col-12">
                 <div class="loader17">

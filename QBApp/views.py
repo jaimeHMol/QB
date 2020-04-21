@@ -161,7 +161,7 @@ class QResults2View(SingleTableView):
                     else:
                         if int(procEnvAttachCount) > 1 :
                             logging.warning("*** Shouldn't be more than one enviroment attached to process with the current filters")
-                            
+
                         deployedInfo = "No"
                         atomName = "---"
                         lastExecInfo = "---"
@@ -342,6 +342,7 @@ class LoginUserCall(ListView):
 class LogoutCall(TemplateView):
     def get(self, request, **kwargs):
         request.session.flush()
+        request.session["redirected"] = True
         return redirect("/")
 
 
