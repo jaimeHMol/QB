@@ -130,14 +130,11 @@ class QResults2View(SingleTableView):
                     deployedInfo = "No"
                     scheduleId = ""
 
+                    procEnvAttachResponse = boomiAPIBuildRequests.ProcessEnvironmentAttachment(request, processId, environmentId)
 
-                    # BUG: NOT USING THE PROPER API OBJECT. TO CHECK!!!!!
-                    # Calling DEPLOYMENT query of the Boomi Atomsphere API
-                    deploymentsResponse = boomiAPIBuildRequests.deploymentList(request, processId, environmentId)
-                    deploymentsCount, deploymentError, deploymentResults, deploymentAdditional, deploymentQueryToken = boomiAPIParseResults.deploymentList(deploymentsResponse)
-                    logging.warning("*** Each process deployment response: " + str(deploymentsResponse))
+                    procEnvAttachCount, procEnvAttachError, procEnvAttachResults, procEnvAttachAdditional, procEnvAttachQueryToken = boomiAPIParseResults.ProcessEnvironmentAttachment(procEnvAttachResponse)
 
-                    if int(deploymentsCount) > 0:
+                    if int(procEnvAttachCount) == 1:
                         resultsDeployments = resultsDeployments + 1
                         deployedInfo = "Yes"
 
@@ -161,9 +158,10 @@ class QResults2View(SingleTableView):
                                 enableInfo = scheduleStatusResult
                         else:
                             enableInfo = "No"
-                        # else: # HINT: Activate if you want to see all the process even if those are not deployed.
-                            # data2.append({"processName": processName, "atomName": atomName, "cadence": "None", "enable":"No", "lastExec": "None", "durAvg": "None"})
                     else:
+                        if int(procEnvAttachCount) > 1 :
+                            logging.warning("*** Shouldn't be more than one enviroment attached to process with the current filters")
+                            
                         deployedInfo = "No"
                         atomName = "---"
                         lastExecInfo = "---"
